@@ -1,23 +1,26 @@
 package com.ciandt.paul;
 
 import com.ciandt.paul.context.Context;
+import com.ciandt.paul.entity.HistoricalMatch;
 import com.ciandt.paul.entity.Match;
 import com.ciandt.paul.entity.Prediction;
 
-/**
- * Dummy predictor that predicts that all games will be 1x0
- */
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class HighestRankingPredictor implements Predictor {
 
+
+    public static final int DIFFERENCE_POINTS = 40;
 
     @Override
     public Prediction predict(Match match, Context context) {
         Prediction prediction = new Prediction(match);
-
-        if (context.getAwayFifaRank().getPoints() - context.getHomeFifaRank().getPoints() > 5) {
-            prediction.setAwayScore(1);
-            prediction.setHomeScore(0);
-        } else if (context.getHomeFifaRank().getPoints() - context.getAwayFifaRank().getPoints() > 5) {
+        if ((context.getAwayFifaRank().getPoints() - context.getHomeFifaRank().getPoints()) > DIFFERENCE_POINTS) {
+            prediction.setAwayScore(2);
+            prediction.setHomeScore(1);
+        } else if ((context.getHomeFifaRank().getPoints() - context.getAwayFifaRank().getPoints()) > DIFFERENCE_POINTS) {
             prediction.setAwayScore(0);
             prediction.setHomeScore(1);
         } else {
@@ -26,4 +29,7 @@ public class HighestRankingPredictor implements Predictor {
         }
         return prediction;
     }
+
+
+
 }
